@@ -1,8 +1,13 @@
 <?php
 
-add_filter( 'woocommerce_checkout_fields' , 'custom_override_checkout_fields' );
- 
-function custom_override_checkout_fields( $fields ) {
+/**
+ * Billing
+ */
+
+add_filter('woocommerce_checkout_fields', 'custom_override_checkout_fields');
+
+function custom_override_checkout_fields($fields)
+{
     //unset($fields['billing']['billing_first_name']);
     unset($fields['billing']['billing_last_name']);
     unset($fields['billing']['billing_company']);
@@ -23,26 +28,53 @@ function custom_override_checkout_fields( $fields ) {
     return $fields;
 }
 
-add_filter( 'woocommerce_billing_fields' , 'custom_required_override_checkout_fields' );
+add_filter('woocommerce_billing_fields', 'custom_required_override_checkout_fields');
 
-function custom_required_override_checkout_fields( $fields ) {
-	$fields['billing_email']['required'] = false;
-  	return $fields;
-}
-
-add_filter( 'woocommerce_checkout_fields' , 'custom_rename_override_checkout_fields' );
-
-function custom_rename_override_checkout_fields( $fields ) {
-    $fields['billing']['billing_first_name']['label'] = 'Full Name';
-	$fields['billing']['billing_first_name']['placeholder'] = 'Your Full Name';
-	$fields['billing']['billing_email']['placeholder'] = 'Your Email';
-	$fields['billing']['billing_phone']['placeholder'] = 'Your Phone Number';
+function custom_required_override_checkout_fields($fields)
+{
+    $fields['billing_email']['required'] = false;
     return $fields;
 }
 
-add_filter( 'woocommerce_default_address_fields' , 'override_default_address_fields' );
-function override_default_address_fields( $address_fields ) {
-	$address_fields['address_1']['label'] = 'Address';
-	$address_fields['address_1']['placeholder'] = 'Your Address';
-	return $address_fields;
+add_filter('woocommerce_checkout_fields', 'custom_rename_override_checkout_fields');
+
+function custom_rename_override_checkout_fields($fields)
+{
+    $fields['billing']['billing_first_name']['label'] = 'Full Name';
+    $fields['billing']['billing_first_name']['placeholder'] = 'Your Full Name';
+    $fields['billing']['billing_email']['placeholder'] = 'Your Email';
+    $fields['billing']['billing_phone']['placeholder'] = 'Your Phone Number';
+    return $fields;
+}
+
+add_filter('woocommerce_default_address_fields', 'override_default_address_fields');
+function override_default_address_fields($address_fields)
+{
+    $address_fields['address_1']['label'] = 'Address';
+    $address_fields['address_1']['placeholder'] = 'Your Address';
+    return $address_fields;
+}
+
+/**
+ * Shipping fields
+ */
+
+add_filter('woocommerce_checkout_fields', 'shipping_fields_remove');
+function shipping_fields_remove($fields)
+{
+    unset($fields['shipping']['shipping_last_name']);
+    unset($fields['shipping']['shipping_company']);
+    unset($fields['shipping']['shipping_address_2']);
+    unset($fields['shipping']['shipping_city']);
+    unset($fields['shipping']['shipping_postcode']);
+    unset($fields['shipping']['shipping_address_2']);
+    unset($fields['shipping']['shipping_postcode']);
+    unset($fields['shipping']['shipping_company']);
+    unset($fields['shipping']['shipping_last_name']);
+    unset($fields['shipping']['shipping_city']);
+
+    $fields['shipping']['shipping_first_name']['placeholder'] = 'My new placeholder';
+    $fields['shipping']['shipping_first_name']['label'] = 'My new label';
+
+    return $fields;
 }
